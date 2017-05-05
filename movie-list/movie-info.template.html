@@ -1,0 +1,71 @@
+<div class="row" ng-cloak>
+
+<div class="col-md-8">
+  <h4>Movie details</h4>
+  <div class="media thumbnail">
+    <!-- class media , to create media element-->
+    <img ng-if="model.movieDetails.poster_path" class="pull-left media-object pull-left" ng-src="https://image.tmdb.org/t/p/w92{{model.movieDetails.poster_path}}" alt="{{model.movieDetails.title}}" />
+    <div class="media-body">
+      <h4 class="media-heading">{{model.movieDetails.title}}</h4>
+      
+      <small><i>{{model.movieDetails.tagline}}</i></small></br></br>
+	  <p class="mb-1">{{model.movieDetails.overview}}</p>
+      <p ng-if="model.movieDetails.release_date" class="mb-1">Released date: {{model.movieDetails.release_date}}</p>
+      <span ng-if="model.movieDetails.genres" class="mb-1" ng-repeat="genre in model.movieDetails.genres"> Genre: {{genre.name}}{{$last ? '' : ', '}}</span>
+      
+    </div>
+	
+		<!-- Panel-group-->
+		<div class="panel-group" id="accordion">
+		  <div class="panel panel-default">
+			
+			<div class="panel-heading">
+			  <h4 class="panel-title">
+				<a href="javascript:;" data-toggle="collapse" data-parent="#accordion" data-target="#collapseMore">
+				  Trailer
+				</a>
+			  </h4>
+			</div>
+			<div id="collapseMore" class="panel-collapse collapse in">
+			  <div class="panel-body">
+				<div ng-if="model.trailar.length!=0" id="demo" class="embed-responsive embed-responsive-16by9">
+					<iframe ng-if="model.trailar.length!=0" class="embed-responsive-item" style="max-width:560px; max-height:315px" ng-src="{{model.trailar}}"></iframe>
+				</div>
+			  </div>
+			</div>
+			
+			<div class="panel-heading">
+			  <h4 class="panel-title">
+				<a href="javascript:;" data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne">
+				  Cast
+				</a>
+			  </h4>
+			</div>
+			<div id="collapseOne" class="panel-collapse collapse">
+			  <div class="panel-body">
+				<ul class="list-group">
+					<li class="list-group-item" ng-repeat="casts in model.movieDetails.credits.cast | limitTo:5">
+					<span>{{casts.character}} - {{casts.name}}</span>
+				</ul>
+			  </div>
+			</div>
+			
+		  </div>
+		</div> <!-- Panel-group end-->
+		</div>
+	</div>
+
+	<div class="col-lg-4">
+	  <h4>Similar movies</h4>
+	  
+		<div ng-repeat="similarMovie in model.movieDetails.similar.results | limitTo:10" class="media thumbnail">
+		<img ng-if="similarMovie.poster_path" class="pull-left media-object pull-left" ng-src="https://image.tmdb.org/t/p/w92{{similarMovie.poster_path}}" alt="{{similarMovie.title}}" />
+		
+		<div class="media-body">
+			<a href="#!/movies/{{similarMovie.id}}">{{similarMovie.title}}</a>
+			<h4 class="media-heading">{{similarMovie.title}}</h4>
+			<p ng-init="limit = 150" class="mb-1">{{similarMovie.overview | limitTo: limit}}{{similarMovie.overview.length > limit ? '...' : ''}}</p>
+		</div>
+	  </div>
+	</div>
+</div><!--row-->

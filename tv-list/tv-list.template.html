@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-lg-3">
+    <form>
+      <div class="form-group">
+        <label for="search">Search tv-shows</label>
+        <input type="text" class="form-control" id="search" ng-model="model.query" aria-label="Search" placeholder="Search tv show...">
+      </div>
+
+      <div class="form-group">
+        <label for="sortSelect">Sort by</label>
+        <select class="form-control" id="sortSelect" ng-model="model.orderProp">
+          <option value="name">Alphabetical</option>
+          <option value="first_air_date">Release date</option>
+        </select>
+		
+      </div>
+	  <div class="form-group">
+        <label for="languageSelect">View info by language</label>
+        <select class="form-control" id="languageSelect" ng-model="model.language" ng-change="changeLanguage()">
+          <option value="en-US">English</option>
+          <option value="sv">Swedish</option>
+        </select>
+      </div>
+    </form>
+
+  </div>
+  <div class="col-md-9">
+    <!--Body content-->
+	<h2>Popular tv-shows</h2>
+
+    <ul class="movies list-group">
+      <li class="movie-list-item thumbnail" ng-repeat="shows in model.list | filter:model.query | orderBy:model.orderProp">
+		<img class="pull-left gap-right img-thumbnail img-responsive" ng-src="https://image.tmdb.org/t/p/w92{{shows.poster_path}}" alt="{{shows.title}}" />
+		<a href="#!/tv/{{shows.id}}">{{shows.name}}</a>
+        <h5 class="mb-1">{{shows.name}}</h5>
+        <p class="mb-1">{{shows.overview}}</p>
+		<p class="mb-1">Release date: {{shows.first_air_date}}</p>
+		
+      </li>
+    </ul>
+
+  </div>
+</div>

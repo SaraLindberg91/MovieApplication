@@ -1,0 +1,72 @@
+<div class="row">
+  <div class="col-lg-3">
+    <form>
+      <div class="form-group">
+        <label for="search">Search</label>
+        <input type="text" class="form-control" id="search" ng-change="apiSearch()" ng-model="model.query" ng-model-options='{ debounce: 1000 }' aria-label="Search" placeholder="Search tv show or movie...">
+      </div>
+	  
+	  <div class="form-group">
+        <label for="sortSelect">Sort by</label>
+        <select class="form-control" id="sortSelect" ng-model="model.orderProp">
+          <option value="title">Alphabetical</option>
+          <option value="first_air_date">Release date</option>
+        </select>
+		</div>
+
+	  <div class="form-group">
+        <label for="languageSelect">View info by language</label>
+        <select class="form-control" id="languageSelect" ng-model="model.language" ng-change="changeLanguage()">
+          <option value="en-US">English</option>
+          <option value="sv">Swedish</option>
+        </select>
+      </div>
+    </form>
+
+  </div>
+  <div class="col-md-9">
+    <!--Body content-->
+	<h2 ng-if="model.list.length">Result</h2>
+
+    <ul class="movies list-group">
+      <li class="movie-list-item thumbnail" ng-repeat="shows in model.list | filter:model.query | orderBy:model.orderProp" ng-switch on="shows.media_type">
+		<div class="media" ng-switch-when="tv">
+			<img ng-if="shows.poster_path" class="pull-left media-object gap-right img-thumbnail img-responsive" ng-src="https://image.tmdb.org/t/p/w92{{shows.poster_path}}" alt="{{shows.title}}" />
+			<div class="media-body">
+				<a href="#!/tv/{{shows.id}}">{{shows.name}}</a>
+				<h5 class="mb-1 media-heading">{{shows.name}} ({{shows.media_type}})</h5>
+				<p class="mb-1">{{shows.overview}}</p>
+				<p ng-switch-when="movie" class="mb-1">Original title: {{shows.original_title}}</p>
+				<p ng-switch-when="tv" class="mb-1">Original title: {{shows.original_name}}</p>
+				<p class="mb-1">Release date: {{shows.first_air_date}}</p>
+			</div>
+		</div>
+		
+		<div class="media" ng-switch-when="movie">
+			<img ng-if="shows.poster_path" class="pull-left media-object gap-right img-thumbnail img-responsive" ng-src="https://image.tmdb.org/t/p/w92{{shows.poster_path}}" alt="{{shows.title}}" />
+			<div class="media-body">
+				<a href="#!/movies/{{shows.id}}">{{shows.title}}</a>
+				<h5 class="mb-1">{{shows.title}} ({{shows.media_type}})</h5>
+				<p class="mb-1">{{shows.overview}}</p>
+				<p class="mb-1">Original title: {{shows.original_title}}</p>
+				<p class="mb-1">Release date: {{shows.release_date}}</p>
+			</div>
+		</div>
+		
+		<div ng-switch-when="person">
+			<img ng-if="shows.poster_path" class="pull-left gap-right img-thumbnail img-responsive" ng-src="https://image.tmdb.org/t/p/w92{{shows.poster_path}}" alt="{{shows.title}}" />
+			<!--ies/{{shows.id}}">{{shows.title}}</a>-->
+			<h5 class="mb-1">{{shows.name}} ({{shows.media_type}})</h5>
+			<p class="mb-1">Known for:</p>
+			<ul>
+				<li ng-repeat="known_for in shows.known_for">
+					<a href="#!/movies/{{known_for.id}}">{{known_for.original_title}}</a>
+				</li>
+			</ul>
+		</div>
+		
+      </li>
+    </ul>
+
+  </div>
+</div>
